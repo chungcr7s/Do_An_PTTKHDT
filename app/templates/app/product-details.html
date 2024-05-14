@@ -1,0 +1,202 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block details_content %}
+{% for product in products %}
+<!-- Single Product Start -->
+<style>
+  /* CSS cho form bình luận */
+  .comment-form {
+      margin-bottom: 20px;
+  }
+  .comment-form label {
+      font-weight: bold;
+  }
+  .comment-form textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      resize: vertical;
+  }
+</style>
+<div class="container-fluid py-5 mt-5">
+    <div class="container py-5">
+      <div class="row g-4 mb-5">
+        <div class="col-lg-8 col-xl-9">
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <div class="border rounded">
+                <a href="#">
+                  <img
+                    src="{{product.ImageURL}}"
+                    class="img-fluid rounded"
+                    alt="Image"
+                  />
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <h4 class="fw-bold mb-3">{{product.name}}</h4>
+              <p class="mb-3">Category:
+               <span>{{product.category}}</span
+            </p>
+            {% if product.discount %}
+            <p class="mb-3">Giảm giá:
+              <span class = "text-danger"> {{product.discount}} %</span>
+          </p>
+            <h5 class=" mb-3"> Giá <strong class="fs-4">${{product.lastPrice}} </strong> <span class = "text-decoration-line-through fs-6 "> {{product.price}}</span></h5>
+            {% else %}
+              <h5 class=" mb-3"> Giá <span class = " fs-6 "> {{product.price}}</span></h5>
+            {% endif %}
+             
+              <div class="d-flex mb-4">
+                <i class="fa fa-star text-secondary"></i>
+                <i class="fa fa-star text-secondary"></i>
+                <i class="fa fa-star text-secondary"></i>
+                <i class="fa fa-star text-secondary"></i>
+                <i class="fa fa-star"></i>
+              </div>
+              <p class="mb-4">
+                {{product.description}}
+              </p>
+              {% if product.quantity == 0 %}
+              <p class="mb-4">
+                Số lương: {{product.quantity}}
+              </p>
+              <p class="text-danger" style="font-weight: bold;">Hết hàng</p>
+
+              {% else %}
+              <p class="mb-4">
+                Số lương: {{product.quantity}}
+              </p>
+              <a
+                href="#"
+                data-product="{{product.id}}"
+                data-action="add"
+                class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary updated-cart"
+                ><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
+                cart</a
+              >
+              {% endif %}
+            </div>
+            <div class="col-lg-12">
+              <nav>
+                <div class="nav nav-tabs mb-3">
+                  <button
+                    class="nav-link active border-white border-bottom-0"
+                    type="button"
+                    role="tab"
+                    id="nav-about-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-about"
+                    aria-controls="nav-about"
+                    aria-selected="true"
+                  >
+                    Description
+                  </button>
+                  <button
+                    class="nav-link border-white border-bottom-0"
+                    type="button"
+                    role="tab"
+                    id="nav-mission-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-mission"
+                    aria-controls="nav-mission"
+                    aria-selected="false"
+                  >
+                    Reviews
+                  </button>
+                  <!-- Adding the nav for vision tab -->
+                  <button
+                    class="nav-link border-white border-bottom-0"
+                    type="button"
+                    role="tab"
+                    id="nav-vision-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-vision"
+                    aria-controls="nav-vision"
+                    aria-selected="false"
+                  >
+                    Vision
+                  </button>
+                </div>
+              </nav>
+              <div class="tab-content mb-5">
+                <div
+                  class="tab-pane active"
+                  id="nav-about"
+                  role="tabpanel"
+                  aria-labelledby="nav-about-tab"
+                >
+                  <p>
+                    The generated Lorem Ipsum is therefore always free from
+                    repetition injected humour, or non-characteristic words etc.
+                    Susp endisse ultricies nisi vel quam suscipit
+                  </p>
+                  <p>
+                    Sabertooth peacock flounder; chain pickerel hatchetfish,
+                    pencilfish snailfish filefish Antarctic icefish goldeye
+                    aholehole trumpetfish pilot fish airbreathing catfish,
+                    electric ray sweeper.
+                  </p>
+                  <img
+                    src="{% static 'app/clothes/img/anh-size-ao-quan.jpg'%}"
+                    class=""
+                    alt=""
+                  />
+                </div>
+                <div
+                  class="tab-pane"
+                  id="nav-mission"
+                  role="tabpanel"
+                  aria-labelledby="nav-mission-tab"
+                >
+                   <!-- Danh sách bình luận -->
+                  {% for comment in product.comments.all %}
+                  <div class="d-flex">
+                    <div class="">
+                      <p class="mb-2" style="font-size: 14px">{{comment.date_added}}</p>
+                      <div class="d-flex justify-content-between">
+                        <h5>{{comment.author}}</h5>
+                        <div class="d-flex mb-3">
+                          <i class="fa fa-star text-secondary"></i>
+                          <i class="fa fa-star text-secondary"></i>
+                          <i class="fa fa-star text-secondary"></i>
+                          <i class="fa fa-star text-secondary"></i>
+                          <i class="fa fa-star"></i>
+                        </div>
+                      </div>
+                      <p>
+                       {{comment.body}}
+                      </p>
+                    </div>
+                  </div>
+                  {% empty %}
+                  <p>Chưa có bình luận nào.</p>
+                  {% endfor %}
+              </div>
+          </div>
+          <!-- Form bình luận -->
+          {% if user.is_authenticated %}
+            <div class="card my-4 comment-form">
+                <h5 class="card-header">Bình Luận</h5>
+                <div class="card-body">
+                    <form action="{% url 'details' %}?id={{ product.id }}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="commentBody">Nội dung bình luận</label>
+                            {{ form.body }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Gửi bình luận</button>
+                    </form>
+                </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Single Product End -->
+{% endfor %}
+{% endblock details_content %}
