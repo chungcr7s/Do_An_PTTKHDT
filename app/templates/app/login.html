@@ -1,26 +1,37 @@
 {% extends "app/base.html" %}
 {% load static %}
-{% block login_content %}
-  <main>     
-    <div class="sign-up">
-        <form action="." method="POST" class="signup-form" data-netlify="true">
-            {% csrf_token %}
-            <div class="form-btn">
-             <label for="username">Tài khoản:</label>
-             <input type="text" name="username" required id="username" wfd-id="id1">
-            </div>
 
-            <div class="form-btn">
-                <label for="password">Mật khẩu:</label>
-               <input type="password" name="password" required id="password" wfd-id="id1">
-               {% for message in messages %}
-               <span class="error text-danger">{{ message}}</span>
-               {% endfor %}
-            </div>
-            <input id="submit-btn" type="submit" value="Đăng Nhập" id="btn">
+{% block title %}Đăng nhập{% endblock title %}
 
-            <p class="terms">By clicking the button, you are agreeing to our <span><a href="#">Terms and Services</a></span></p>
-        </form>
-        </section>
-    </main>
-{% endblock login_content %}
+{% block main-content %}
+<div class="container">
+    <div class="row my-3">
+        <div class="col-sm-6 offset-sm-3">
+            <h3>Đăng nhập</h3>
+            <hr>
+            <form action="" method="post" novalidate class="shadow p-5">
+                {% csrf_token %}
+                {% for fm in form %}
+                {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
+                    <br>
+                {% endfor %}
+                <small> <a href="{% url 'password_reset'%}">Quên Mật Khẩu?</a></small>
+                <br>
+                <input type="submit" class="btn btn-primary mt-4" value="Đăng nhập">
+                <div class="text-center text-primary fw-bold">
+                    <small> Tạo tài khoản mới? <a href="{% url 'customerregistration'%}"
+                        class="text-danger">Tạo Tài Khoản</a></small>
+                    </div>
+
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <p class="alert alert-danger my-3">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+            </form>
+            </div>
+    </div>
+</div>
+<br><br>
+{% endblock main-content %}
+

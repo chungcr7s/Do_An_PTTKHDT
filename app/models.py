@@ -3,6 +3,71 @@ from django.contrib.auth.models import User
 from PIL import Image
 # Create your models here.
 
+STATE_CHOISE = (
+    ('An Giang', 'An Giang'),
+    ('Ba Ria - Vung Tau', 'Bà Rịa – Vũng Tàu'),
+    ('Bac Lieu', 'Bạc Liêu'),
+    ('Bac Giang', 'Bắc Giang'),
+    ('Bac Kan', 'Bắc Kạn'),
+    ('Bac Ninh', 'Bắc Ninh'),
+    ('Ben Tre', 'Bến Tre'),
+    ('Binh Duong', 'Bình Dương'),
+    ('Binh Dinh', 'Bình Định'),
+    ('Binh Phuoc', 'Bình Phước'),
+    ('Binh Thuan', 'Bình Thuận'),
+    ('Ca Mau', 'Cà Mau'),
+    ('Cao Bang', 'Cao Bằng'),
+    ('Can Tho', 'Cần Thơ'),
+    ('Da Nang', 'Đà Nẵng'),
+    ('Dak Lak', 'Đắk Lắk'),
+    ('Dak Nong', 'Đắk Nông'),
+    ('Dien Bien', 'Điện Biên'),
+    ('Dong Nai', 'Đồng Nai'),
+    ('Dong Thap', 'Đồng Tháp'),
+    ('Gia Lai', 'Gia Lai'),
+    ('Ha Giang', 'Hà Giang'),
+    ('Ha Nam', 'Hà Nam'),
+    ('Ha Noi', 'Hà Nội'),
+    ('Ha Tinh', 'Hà Tĩnh'),
+    ('Hai Duong', 'Hải Dương'),
+    ('Hai Phong', 'Hải Phòng'),
+    ('Hau Giang', 'Hậu Giang'),
+    ('Hoa Binh', 'Hòa Bình'),
+    ('Ho Chi Minh City', 'Thành phố Hồ Chí Minh'),
+    ('Hung Yen', 'Hưng Yên'),
+    ('Khanh Hoa', 'Khánh Hòa'),
+    ('Kien Giang', 'Kiên Giang'),
+    ('Kon Tum', 'Kon Tum'),
+    ('Lai Chau', 'Lai Châu'),
+    ('Lang Son', 'Lạng Sơn'),
+    ('Lao Cai', 'Lào Cai'),
+    ('Lam Dong', 'Lâm Đồng'),
+    ('Long An', 'Long An'),
+    ('Nam Dinh', 'Nam Định'),
+    ('Nghe An', 'Nghệ An'),
+    ('Ninh Binh', 'Ninh Bình'),
+    ('Ninh Thuan', 'Ninh Thuận'),
+    ('Phu Tho', 'Phú Thọ'),
+    ('Phu Yen', 'Phú Yên'),
+    ('Quang Binh', 'Quảng Bình'),
+    ('Quang Nam', 'Quảng Nam'),
+    ('Quang Ngai', 'Quảng Ngãi'),
+    ('Quang Ninh', 'Quảng Ninh'),
+    ('Quang Tri', 'Quảng Trị'),
+    ('Soc Trang', 'Sóc Trăng'),
+    ('Son La', 'Sơn La'),
+    ('Tay Ninh', 'Tây Ninh'),
+    ('Thai Binh', 'Thái Bình'),
+    ('Thai Nguyen', 'Thái Nguyên'),
+    ('Thanh Hoa', 'Thanh Hóa'),
+    ('Thua Thien Hue', 'Thừa Thiên Huế'),
+    ('Tien Giang', 'Tiền Giang'),
+    ('Tra Vinh', 'Trà Vinh'),
+    ('Tuyen Quang', 'Tuyên Quang'),
+    ('Vinh Long', 'Vĩnh Long'),
+    ('Vinh Phuc', 'Vĩnh Phúc'),
+    ('Yen Bai', 'Yên Bái'),
+)
 
 class Category(models.Model):
     name = models.CharField(max_length=200, null=True)
@@ -83,19 +148,29 @@ class Comment(models.Model):
     date_added =  models.DateTimeField(auto_now_add = True   ) 
     
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default-avatar-icon-of-social-media-user-vector.jpg', upload_to='profile_pics')
+# class Profile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     image = models.ImageField(default='default-avatar-icon-of-social-media-user-vector.jpg', upload_to='profile_pics')
 
-    def __str__(self):
-        return f'{self.user.username} Profile'
+#     def __str__(self):
+#         return f'{self.user.username} Profile'
 
-    def save(self, *args, **kwargs):
-        super(Profile, self).save(*args, **kwargs)
+#     def save(self, *args, **kwargs):
+#         super(Profile, self).save(*args, **kwargs)
 
-        img = Image.open(self.image.path)
+#         img = Image.open(self.image.path)
 
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+#         if img.height > 300 or img.width > 300:
+#             output_size = (300, 300)
+#             img.thumbnail(output_size)
+#             img.save(self.image.path)
+class Customer(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    locality = models.CharField(max_length=200)
+    city = models.CharField(max_length=50)
+    mobile = models.IntegerField(default=0)
+    zipcode = models.IntegerField()
+    state = models.CharField(choices=STATE_CHOISE,max_length=100)
+    def _str_(self):
+        return self.name
