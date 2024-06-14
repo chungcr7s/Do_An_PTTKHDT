@@ -77,6 +77,7 @@ WSGI_APPLICATION = 'Economic.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#xampp
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql', 
@@ -87,6 +88,9 @@ WSGI_APPLICATION = 'Economic.wsgi.application'
 #     }
 # }
 
+
+
+# sqlite3
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
